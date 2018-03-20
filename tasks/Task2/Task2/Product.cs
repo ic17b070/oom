@@ -14,22 +14,24 @@ namespace Task2
 
     class Product
     {
-        private String label;
-        private Double price;
-        private Int32 quantity;
-        private Unit p_unit;
+        private decimal price;
 
-        public Decimal Label { get; }
-        public Double Price { get; }
-        public Int32 Quantity { get; }
-        public Unit Unit { get; }
+        public string   Label       { get; }
+        public int    Quantity    { get; }
+        public Unit     Unit        { get; }
+        public decimal Price { get { return price; } }
 
-        public Product(String label, Double m_price, Int32 quantity, Unit p_unit)
+        public Product(string label, decimal price, int quantity, Unit unit)
         {
-            this.label = label;
-            this.price = m_price;
-            this.quantity = quantity;
-            this.p_unit = p_unit;
+            Label = label;
+            this.price = price;
+            Quantity = quantity;
+            Unit = unit;
+        }
+
+        public void UpdatePrice(decimal new_price)
+        {
+            if(price > 0 ) price = new_price;
         }
     }
 }
