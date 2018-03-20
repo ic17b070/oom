@@ -2,26 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Task2
+namespace Task3
 {
-    enum Unit
-    {
-        PIECE = 1,
-        LITER = 2,
-        GRAMM = 3
-    }
-
-    class Product
+    class MeatProducts : IGoods
     {
         private decimal price;
 
         public string   Label       { get; }
         public int      Quantity    { get; }
         public Unit     Unit        { get; }
-        public decimal  Price { get { return price; } }
+        public decimal  Price       { get { return price; } }
 
-        public Product(string label, decimal price, int quantity, Unit unit)
+        public MeatProducts(string label, decimal price, int quantity, Unit unit)
         {
             Label = label;
             this.price = price;
@@ -31,7 +25,7 @@ namespace Task2
 
         public void UpdatePrice(decimal new_price)
         {
-            if(price > 0 ) price = new_price;
+            if (price > 0) price = new_price;
         }
     }
 }
