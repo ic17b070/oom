@@ -57,16 +57,30 @@ namespace Task6
             };
         }
 
+        void ForEach<T>(this IEnumerable<T> xs, Action<T> a)
+        {
+            foreach (var x in xs) a(x);
+        }
+
+        IEnumerable<T> Do<T>(this IEnumerable<T> xs, Action<T> a)
+        {
+            foreach (var x in xs)
+            {
+                a(x);
+                yield return x;
+            }
+        }
+
         static void printAllProducts(IProduct[] productList)
         {
             Console.WriteLine("All Products:");
-            productList.ToList().ForEach(p => Console.WriteLine($"Item: {p.Label,-15} Price: {p.Price.Amount,5} per {p.Measurement.Amount,8:0.00} {p.Measurement.Unit}"));
+            productList.ForEach(p => Console.WriteLine($"Item: {p.Label,-15} Price: {p.Price.Amount,5} per {p.Measurement.Amount,8:0.00} {p.Measurement.Unit}"));
             Console.WriteLine();
         }
         static void printExpiredProducts(IProduct[] productList)
         {
             Console.WriteLine("Expired Products:");
-            productList.Where(p => p.HasExpired() == true).ToList().ForEach(p => { Console.WriteLine(p); });
+            productList.Where(p => p.HasExpired() == true).ForEach(p => { Console.WriteLine(p); });
             Console.WriteLine();
         }
 
