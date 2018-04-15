@@ -29,6 +29,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -78,12 +79,14 @@
     <Compile Include="Models\AbstractProduct.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\IProduct.cs" />
-    <Compile Include="impl\DairyProduct.cs" />
+    <Compile Include="Models\impl\DairyProduct.cs" />
     <Compile Include="Models\Price.cs" />
     <Compile Include="Models\Measurement.cs" />
     <Compile Include="Main\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="impl\MeatProduct.cs" />
+    <Compile Include="Models\impl\MeatProduct.cs" />
+    <Compile Include="Serialization\Export.cs" />
+    <Compile Include="Serialization\Import.cs" />
     <Compile Include="Tests\TestDairyProducts.cs" />
     <Compile Include="Tests\TestMeatProducts.cs" />
     <Compile Include="Tests\TestMeasurement.cs" />

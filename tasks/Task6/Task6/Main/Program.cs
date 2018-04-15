@@ -6,45 +6,52 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
+using Task6.Serialization;
 
 namespace Task6
 {
-    class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
-            var goods = initProducts();
+            var products = initProducts();
 
-            printAllProducts(goods);
-            printExpiredProducts(goods);
-
-            serialize(goods);
-
-            Console.WriteLine("Deserialized Products:");
-            printAllProducts(deserialize());
-        }
-
-        static void serialize(Object x)
-        {
-            Console.WriteLine(">>>>>>>>>>>>>>>Serialization: Exporting Objects");
+            Console.WriteLine("All Products:");
+            products.ForEach(p => Console.WriteLine($"Item: {p.Label,-15} Price: {p.Price.Amount,5} per {p.Measurement.Amount,8:0.00} {p.Measurement.Unit}"));
             Console.WriteLine();
-            var settings = new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.Auto };
-            var text = JsonConvert.SerializeObject(x, settings);
-            var desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var filename = Path.Combine(desktop, "goods.json");
-            File.WriteAllText(filename, text);
+
+
+            Console.WriteLine("Expired Products:");
+            products.Where(p => p.HasExpired() == true).ForEach(p => { Console.WriteLine(p); });
+            Console.WriteLine();
+
+            Export.start(products);
+
+            Console.WriteLine("Reseting products list to empty array");
+            Console.WriteLine();
+            products = new IProduct[]{};
+
+            products = Import.start();
+
+            Console.WriteLine("All Products:");
+            products.ForEach(p => Console.WriteLine($"Item: {p.Label,-15} Price: {p.Price.Amount,5} per {p.Measurement.Amount,8:0.00} {p.Measurement.Unit}"));
+            Console.WriteLine();
+
+            var producer = new Subject<IProduct>();
+            producer.Subscribe(x => Console.WriteLine($"Push one product every second: {x}"));
+
+            foreach(var x in products)
+            {
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+                producer.OnNext(x);
+            }
         }
 
-        static IProduct[] deserialize()
+        static void ForEach<T>(this IEnumerable<T> xs, Action<T> a)
         {
-            Console.WriteLine("<<<<<<<<<<<<<<<Deserialization: Importing Objects");
-            var settings = new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.Auto };
-            var desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var filename = Path.Combine(desktop, "goods.json");
-            var textFromFile = File.ReadAllText(filename);
-            var itemsFromFile = JsonConvert.DeserializeObject<IProduct[]>(textFromFile, settings);
-            return itemsFromFile;
+            foreach (var x in xs) a(x);
         }
+
 
         static IProduct[] initProducts()
         {
@@ -56,33 +63,14 @@ namespace Task6
                 new MeatProduct("Minced Meat", new Price (8.70m, Currency.EUR), new Measurement(1, Unit.KILOGRAMM), new DateTime(2018,04,01))
             };
         }
-
-        void ForEach<T>(this IEnumerable<T> xs, Action<T> a)
-        {
-            foreach (var x in xs) a(x);
-        }
-
-        IEnumerable<T> Do<T>(this IEnumerable<T> xs, Action<T> a)
-        {
-            foreach (var x in xs)
-            {
-                a(x);
-                yield return x;
-            }
-        }
-
-        static void printAllProducts(IProduct[] productList)
-        {
-            Console.WriteLine("All Products:");
-            productList.ForEach(p => Console.WriteLine($"Item: {p.Label,-15} Price: {p.Price.Amount,5} per {p.Measurement.Amount,8:0.00} {p.Measurement.Unit}"));
-            Console.WriteLine();
-        }
-        static void printExpiredProducts(IProduct[] productList)
-        {
-            Console.WriteLine("Expired Products:");
-            productList.Where(p => p.HasExpired() == true).ForEach(p => { Console.WriteLine(p); });
-            Console.WriteLine();
-        }
-
     }
 }
+
+//IEnumerable<T> Do<T>(this IEnumerable<T> xs, Action<T> a)
+//{
+//    foreach (var x in xs)
+//    {
+//        a(x);
+//        yield return x;
+//    }
+//}
