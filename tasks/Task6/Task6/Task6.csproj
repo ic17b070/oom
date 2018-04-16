@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Main\AsyncExample.cs" />
     <Compile Include="Models\api\AbstractProduct.cs" />
     <Compile Include="Models\Currency.cs" />
     <Compile Include="Models\api\IProduct.cs" />

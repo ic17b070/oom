@@ -41,12 +41,27 @@ namespace Task6
             var producer = new Subject<IProduct>();
             producer.Subscribe(x => WriteLine($"Push one product every second: {x}"));
 
-            foreach(var x in products)
+            foreach (var x in products)
             {
                 System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
                 producer.OnNext(x);
             }
+
+            Task6.Main.AsyncExample.Run();
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
         static void ForEach<T>(this IEnumerable<T> xs, Action<T> a)
         {
             foreach (var x in xs) a(x);
