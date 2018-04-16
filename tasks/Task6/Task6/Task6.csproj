@@ -76,9 +76,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\AbstractProduct.cs" />
+    <Compile Include="Models\api\AbstractProduct.cs" />
     <Compile Include="Models\Currency.cs" />
-    <Compile Include="Models\IProduct.cs" />
+    <Compile Include="Models\api\IProduct.cs" />
     <Compile Include="Models\impl\DairyProduct.cs" />
     <Compile Include="Models\Price.cs" />
     <Compile Include="Models\Measurement.cs" />

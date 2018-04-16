@@ -7,6 +7,7 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 using Task6.Serialization;
+using static System.Console;
 
 namespace Task6
 {
@@ -16,29 +17,29 @@ namespace Task6
         {
             var products = initProducts();
 
-            Console.WriteLine("All Products:");
-            products.ForEach(p => Console.WriteLine($"Item: {p.Label,-15} Price: {p.Price.Amount,5} per {p.Measurement.Amount,8:0.00} {p.Measurement.Unit}"));
-            Console.WriteLine();
+            WriteLine("All Products:");
+            products.ForEach(p => WriteLine($"Item: {p.Label,-15} Price: {p.Price.Amount,5} per {p.Measurement.Amount,8:0.00} {p.Measurement.Unit}"));
+            WriteLine();
 
 
-            Console.WriteLine("Expired Products:");
-            products.Where(p => p.HasExpired() == true).ForEach(p => { Console.WriteLine(p); });
-            Console.WriteLine();
+            WriteLine("Expired Products:");
+            products.Where(p => p.HasExpired() == true).ForEach(p => { WriteLine(p); });
+            WriteLine();
 
             Export.start(products);
 
-            Console.WriteLine("Reseting products list to empty array");
-            Console.WriteLine();
+            WriteLine("Reseting products list to empty array");
+            WriteLine();
             products = new IProduct[]{};
 
             products = Import.start();
 
-            Console.WriteLine("All Products:");
-            products.ForEach(p => Console.WriteLine($"Item: {p.Label,-15} Price: {p.Price.Amount,5} per {p.Measurement.Amount,8:0.00} {p.Measurement.Unit}"));
-            Console.WriteLine();
+            WriteLine("All Products:");
+            products.ForEach(p => WriteLine($"Item: {p.Label,-15} Price: {p.Price.Amount,5} per {p.Measurement.Amount,8:0.00} {p.Measurement.Unit}"));
+            WriteLine();
 
             var producer = new Subject<IProduct>();
-            producer.Subscribe(x => Console.WriteLine($"Push one product every second: {x}"));
+            producer.Subscribe(x => WriteLine($"Push one product every second: {x}"));
 
             foreach(var x in products)
             {
@@ -46,13 +47,10 @@ namespace Task6
                 producer.OnNext(x);
             }
         }
-
         static void ForEach<T>(this IEnumerable<T> xs, Action<T> a)
         {
             foreach (var x in xs) a(x);
         }
-
-
         static IProduct[] initProducts()
         {
             return new IProduct[]
